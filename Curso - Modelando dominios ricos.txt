@@ -1,0 +1,103 @@
+Modelando dominios ricos - Balta.IO - 21/06/2018
+------------------------------------------------
+
+ Aula 1 - Introdução
+ - Apresentação da agenda do curso.
+
+ Aula 2 - Linguagem Ubíqua
+ - Linguagem obíqua é o desenvolvedor e o cliente (negócio) falando a mesma linguagem.
+ - É nomear a entidade da mesma forma que o cliente a nomeia.
+
+ Aula 3: Domínios Ricos vs Domínios Anêmicos
+ - Dominios anemicos são por exemplo classes apenas com propriedades, sem métodos, sem regras de negócios.
+   Procedures não são possiveis testar pela aplicação.
+ 
+ Aula 4: Sub dominios
+ - Quando tem um dominio muito grande o ideal é quebrar ele em sub-dominio como forma de facilitar o entendimento, o desenvolvimento e a manutenção.
+ 
+ Aula 5 - Separação em contexto delimitados
+ - Pegar o que temos e quebrar em contextos menores, tipo o conceito microserviços.
+ 
+ Aula 6 - Organizando a solução
+ - Utiliza o VS Code.
+ - Criação da estrutura de pastas DDD pelo terminal:
+   md = criação de pastas
+   dotnet new sln = criação de uma Solution
+   dotnet new classlib = criar um projeto que depois se torna uma dll.	
+   dotnet new mstest = projeto de teste.
+   dotnet sln add PaymentContext.Domain/PaymentContext.Domain.csproj = adiciona referencia do projeto em determinada solução.
+   dotnet restore = restaura todos os pacotes dos projetos
+   dotnet build = para compilar o projeto pra ver erros.
+   dotnet add reference ../PaymentContext.Shared/PaymentContext.Shared.csproj = adiciona referencia ao dominio selecionado.
+   
+ - O Projeto Domain é o dominio rico que esta modelando
+ - O projeto Shared são itens que podem ser compartilhados entre os dominios.
+ - O projeto Tests são os testes que serão executados.
+ - Em relação as referencias, o Domain depende do Shared, o Shared não depende de ninguem e o Tests depende dos dois projetos.
+  
+ Aula 7 - Definindo as Entidades
+ - As entidades são basicamente a referência daquilo que conversamos com o cliente sobre o levantamento de requisitos.
+   Uma entidade possui propriedades e métodos.
+
+ Aula 8 - Corrupção no Código
+ - Todo código fonte deve ser facil de usar, deve ser desenvolvido pensando no outro desenvolvedor que vai dar manutenção.
+ - O código precisa ser expressivo, ou seja, ele precisa ser claro, dar condições do desenvolvedor saber de forma pratica como utilizá-lo.
+ - Os principios do Solid são uma boa pratica nesse contexto.
+ 
+ Aula 9 - Solid e Clean Code
+ - Livros recomendados do autor Robert C. Martins (Uncle Bob): Clean Code, Clean Coder e Clean Architeture
+ 
+ Aula 10 - Primitive Obsession
+ - O ideal é evitar a obsessão por tipos primitivos (string, int, decimal, DateTime, etc) e utilizar tipos proprios com value objects, para que seja possivel criar validações centralizadas e evite-se a duplicação de código.
+ 
+ Aula 11 - Value Objects
+ - Value Objects são tipos proprios que compoe uma entidade.
+ - A diferença entre entidade e value objects é que a entidade possui ID e o value objects não.
+   
+ Aula 12 - Implementando Validações
+ - É importante evitar o uso de retorno de Exceptions para validações em entidades.
+ - Exceptions devem ser utilizadas apenas para erros desconhecidos, ou seja, os erros que não se espera.
+ - Exceptions gera muito consumo do processador.
+ - Como boas praticas é interessante utilizar o FluntValidations (by Balta) para efetuar validações nas entidades.
+ 
+ Aula 13 - Design By Contracts
+ - É a ideia de desenvolver com o uso de contratos/validações é para evitar o uso de "IFs" no código que aumentam a complexidade ciclomatica.
+ - A equipe do balta criou dentro da lib FluntValidations, contratos com uma serie de validações que podem ser utilizadas para validar propriedades da entidade e com isso evitar o uso de IFs.
+ 
+ Aula 14 - Design By Contracts
+ - Design By Contracts é a ideia de desenvolver com o uso de contratos para validações basicas, para evitar o uso de "IFs" no código que aumentam a complexidade ciclomatica.
+ - A equipe do balta criou dentro da lib FluntValidations, contratos com uma serie de validações que podem ser utilizadas para validar propriedades da entidade.
+ 
+ Aula 15 - Testando as Entidades e VOs
+ - Métodologia para teste:
+	1 - RED: Faz o teste pra dar erro (todos os testes falham)
+	2 - GREEN: Faz o teste pra dar certo (todos os testes sem falhas).
+	3 - REFACTOR: Refatora o código.
+ 
+ Aula 16 - Commands
+ - CQRS = Basicamente a segregação do código por comandos e querys.
+   Os comandos são os inputs de dados e as querys são utilizadas para a leitura de dados.
+   Normalmente até os banco de dados são separados, um banco normalizado para input de dados e outro banco não normalizado (ex.: mongoDB) para leitura de dados.
+ 
+ Aula 17 - Fail Fast Validation
+ - Fail Fast Validation é o ato de colocar as validações no Command, dessa forma evita-se de fazer resuisições ao dominio e ao banco de dados caso o command esteja inválido.
+ 
+ Aula 18 - Testando os Commands
+ - É possivel realizar testes no Command herdando o FluntValidations e criando os contratos com as validações desejadas.
+ 
+ Aula 19 - Repositorie Pattern
+ - A ideia é criar interfaces somente com a assinatura do método para não existir a dependencia do banco, ou seja, a ideia é abstrair o acesso ao banco de dados.
+ 
+ Aula 20 - Handlers (manipuladores)
+ - Os  handlers são os manipuladores dos commands, é o handler que faz todo o fluxo de entrada e saida da requisição.
+ 
+ Aula 21 - Testando os Handlers
+ - Os  testes nos handlers seguem a mesma ideia dos testes anteiores, é necessário criar um objeto do command e enviá-lo para o Handle que seguirá o fluxo do command criado.
+ - A sugestão é criar um Fake repository para realizar os testes que precisam de acesso a dados.
+ 
+ Aula 22 - Queries
+ - As queris são utilizadas para realizar a leitura de dados.
+ - A sugestão é criar métodos estáticos com expressões linqs.
+ 
+ Aula 23 - Testando suas Queries
+ 
